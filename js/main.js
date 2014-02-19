@@ -11,14 +11,17 @@ DOMCACHE = {
 };
 
 $(document).ready(function () {
+
+    var tsa, sn, outer, which_slider, which_index, which_slides;
+
     DOMCACHE.get('.text_sizes a').on('click', function(e) {
         e.preventDefault();
-        thisE = $(this);
+        tsa = $(this);
         outer = DOMCACHE.get('#outer');
         $(outer).removeClass('text_small text_medium text_large');
-        $(outer).addClass('text_' + $(thisE).data('size'));
+        $(outer).addClass('text_' + $(tsa).data('size'));
         DOMCACHE.get('.text_sizes a').removeClass('text_size_active');
-        $(thisE).addClass('text_size_active');
+        $(tsa).addClass('text_size_active');
         update_diagrams();
     });
 
@@ -46,8 +49,7 @@ $(document).ready(function () {
         DOMCACHE.get('.flexslider').flexslider(which_index);
         update_diagrams();
         DOMCACHE.get('.flexslider' + which_slider).flexslider(0);
-        DOMCACHE.get('a.slider_nav_' + which_slider).removeClass('slider_active');
-        DOMCACHE.get('a.slider_nav_' + which_slider).first().addClass('slider_active');
+        DOMCACHE.get('a.slider_nav_' + which_slider).removeClass('slider_active').first().addClass('slider_active');
         DOMCACHE.get('.flexslider' + which_slider).show();
 
     });
@@ -66,40 +68,42 @@ $(document).ready(function () {
 
     DOMCACHE.get('a.slider_nav').on('click', function(e) {
         e.preventDefault();
-        thisE = $(this);
+        sn = $(this);
         which_slider = $(this).data('which-slider');
         which_index = $(this).data('which-index');
         DOMCACHE.get('.flexslider' + which_slider).flexslider(which_index);
         DOMCACHE.get('a.slider_nav').removeClass('slider_active');
-        $(thisE).addClass('slider_active');
+        $(sn).addClass('slider_active');
 
     });
 
-    function update_diagrams() {
-
+    var update_diagrams = function() {
         DOMCACHE.get('.diagram_middle').each(function() {
             var h = 0;
             var elem = $(this);
             var e_h = elem.height();
-
             if ($(document).width() < 400) {
-                elem.find('.diagram_box').each(function() {
-                    elem.find('.diagram_box').removeClass('autoHeight').addClass('minAutoHeight');
-                });
+                DOMCACHE.get('.diagram_box').removeClass('autoHeight').addClass('minAutoHeight');
             } else {
-                elem.find('.diagram_box').each(function() {
-                    elem.find('.diagram_box').removeClass('minAutoHeight').addClass('autoHeight');
+                DOMCACHE.get('.diagram_box').each(function() {
+                    DOMCACHE.get('.diagram_box').removeClass('minAutoHeight').addClass('autoHeight');
                     if ($(this).height() > h) { h = $(this).height(); }
                 });
-                elem.find('.diagram_box').css({'min-height': h});
-                elem.find('.diagram_behind').height(h + 50);
+                DOMCACHE.get('.diagram_box').css({'min-height': h});
+                elem.find('.diagram_behind').height(h + 60);
             }
-
         });
     }
 
-    $(window).resize(function() {
-        update_diagrams();
-    });
+    window.addEventListener("resize", resizeThrottler, false);
+    var resizeTimeout;
+    function resizeThrottler() {
+        if ( !resizeTimeout ) {
+          resizeTimeout = setTimeout(function() {
+            resizeTimeout = null;
+            update_diagrams();
+           }, 66);
+        }
+    }
 
 });
