@@ -1,109 +1,184 @@
-DOMCACHESTORE = {};
-DOMCACHE = {
-    get: function(selector, force) {
-        if (DOMCACHESTORE[selector] !== undefined && force === undefined) {
-            return DOMCACHESTORE[selector];
-        }
+$(document).ready(function() {
+  var throttleDelay = 66;
+  var behindDiagramExtraHeight = 60;
+  var delayEachChoiceFor = 400; // ms
+  var fadeInChoicesFor = 300; // ms
 
-        DOMCACHESTORE[selector] = $(selector);
-        return DOMCACHESTORE[selector];
-    }
-};
+  var allDiagrams = $('.diagram_middle');
+  var allTextSizeLinks = $('.text_sizes a');
+  var choices = $('.choice');
+  var choiceLinks = $('.choice a');
+  var diagramBoxes = $('.diagram_box');
+  var sliders = $('.flexslider, .flexslider2, .flexslider3, .flexslider4');
+  var homeLink = $('header nav a.nav_page_1');
+  var navPage1 = $('.nav_page_1');
+  var navPage2 = $('.nav_page_2');
+  var outer = $('#outer');
+  var sliderNavLinks = $('a.slider_nav');
 
-$(document).ready(function () {
+  var initSlider = function(slider, selector, animation) {
+    animation = animation || 'fade';
 
-    var tsa, sn, outer, which_slider, which_index, which_slides;
-
-    DOMCACHE.get('.text_sizes a').on('click', function(e) {
-        e.preventDefault();
-        tsa = $(this);
-        outer = DOMCACHE.get('#outer');
-        $(outer).removeClass('text_small text_medium text_large');
-        $(outer).addClass('text_' + $(tsa).data('size'));
-        DOMCACHE.get('.text_sizes a').removeClass('text_size_active');
-        $(tsa).addClass('text_size_active');
-        update_diagrams();
+    $(slider).flexslider({
+      animation: animation,
+      selector: selector,
+      touch: false,
+      controlNav: false,
+      animationLoop: false,
+      directionNav: false,
+      slideshow: false,
+      smoothHeight: true
     });
+  };
 
-    DOMCACHE.get('header nav a').on('click', function (e) {
-        e.preventDefault();
-        if ($(this).hasClass('nav_page_1')) {
-            DOMCACHE.get('.nav_page_1').addClass('nav_active');
-            DOMCACHE.get('.nav_page_2').removeClass('nav_active');
-            DOMCACHE.get('.flexslider').flexslider(0);
-            DOMCACHE.get('.flexslider2, .flexslider3, .flexslider4').hide();
-        }
+  var openSlider = function(whichSlider, whichIndex) {
+    $(sliders[0]).flexslider(whichIndex);
+    $(sliders[whichSlider - 1]).flexslider(0);
+    $('a.slider_nav_' + whichSlider)
+      .removeClass('slider_active')
+      .first().addClass('slider_active');
+    $(sliders[whichSlider - 1]).show();
+  };
+
+  var moveSlider = function(whichSlider, whichIndex) {
+    $(sliders[whichSlider - 1]).flexslider(whichIndex);
+    $('a.slider_nav').removeClass('slider_active');
+  };
+
+  var makeSlidePageActive = function(link) {
+    link.addClass('slider_active');
+  };
+
+  var applyNewTextSize = function(newSize) {
+    outer
+      .removeClass('text_small text_medium text_large')
+      .addClass('text_' + newSize);
+  };
+
+  var makeSizeLinkActive = function(activatedLink) {
+    allTextSizeLinks.removeClass('text_size_active');
+    activatedLink.addClass('text_size_active');
+  };
+
+  var goToHomePage = function() {
+    navPage1.addClass('nav_active');
+    navPage2.removeClass('nav_active');
+  };
+
+  var goToAdvicePage = function() {
+    navPage1.removeClass('nav_active');
+    navPage2.addClass('nav_active');
+  };
+
+  var resetSlider = function() {
+    $(sliders[0]).flexslider(0);
+    hideSlidersBut(0);
+  };
+
+  var hideSlidersBut = function(idx) {
+    sliders.each(function(index) {
+      if (index !== idx)
+        $(sliders[index]).hide();
     });
+  };
 
-    DOMCACHE.get(".choice").each(function(index) {
-        $(this).delay(400*index).fadeIn(300);
+  var showChoices = function() {
+    choices.each(function(index) {
+      $(this)
+        .delay(delayEachChoiceFor * index)
+        .fadeIn(fadeInChoicesFor);
     });
-    DOMCACHE.get('.choice a').on('click', function (e) {
-        which_slider = $(this).data('which-slider');
-        which_index  = $(this).data('which-index');
-        which_slides = $(this).data('which-slides');
-        DOMCACHE.get('.flexslider' + which_slider).flexslider({ animation: "slide", selector: ".slides" + which_slides + " > li", touch: false, controlNav: false, animationLoop: false, directionNav: false, slideshow: false, smoothHeight: true });
-        e.preventDefault();
-        DOMCACHE.get('.nav_page_1').removeClass('nav_active');
-        DOMCACHE.get('.nav_page_2').addClass('nav_active');
-        DOMCACHE.get('.flexslider').flexslider(which_index);
-        update_diagrams();
-        DOMCACHE.get('.flexslider' + which_slider).flexslider(0);
-        DOMCACHE.get('a.slider_nav_' + which_slider).removeClass('slider_active').first().addClass('slider_active');
-        DOMCACHE.get('.flexslider' + which_slider).show();
+  };
 
-    });
+  var updateDiagrams = function() {
+    var documentWidth = $(document).width();
 
-    DOMCACHE.get('.flexslider2, .flexslider3, .flexslider4').hide();
-    DOMCACHE.get('.flexslider').flexslider({
-        animation: "fade",
-        selector: ".slides > li",
-        touch: false,
-        controlNav: false,
-        animationLoop: false,
-        directionNav: false,
-        slideshow: false,
-        smoothHeight: true
-    });
+    allDiagrams.each(function() {
+      var maxHeight = 0;
+      var self = $(this);
 
-    DOMCACHE.get('a.slider_nav').on('click', function(e) {
-        e.preventDefault();
-        sn = $(this);
-        which_slider = $(this).data('which-slider');
-        which_index = $(this).data('which-index');
-        DOMCACHE.get('.flexslider' + which_slider).flexslider(which_index);
-        DOMCACHE.get('a.slider_nav').removeClass('slider_active');
-        $(sn).addClass('slider_active');
+      if (documentWidth < 400) {
+        diagramBoxes
+          .removeClass('autoHeight')
+          .addClass('minAutoHeight');
+      } else {
+        diagramBoxes.each(function() {
+          diagramBoxes
+            .removeClass('minAutoHeight')
+            .addClass('autoHeight');
 
-    });
-
-    var update_diagrams = function() {
-        DOMCACHE.get('.diagram_middle').each(function() {
-            var h = 0;
-            var elem = $(this);
-            var e_h = elem.height();
-            if ($(document).width() < 400) {
-                DOMCACHE.get('.diagram_box').removeClass('autoHeight').addClass('minAutoHeight');
-            } else {
-                DOMCACHE.get('.diagram_box').each(function() {
-                    DOMCACHE.get('.diagram_box').removeClass('minAutoHeight').addClass('autoHeight');
-                    if ($(this).height() > h) { h = $(this).height(); }
-                });
-                DOMCACHE.get('.diagram_box').css({'min-height': h});
-                elem.find('.diagram_behind').height(h + 60);
-            }
+          var height = $(this).height();
+          if (height > maxHeight)
+            maxHeight = height;
         });
-    }
+        diagramBoxes.css({ 'min-height': maxHeight });
+        self.find('.diagram_behind').height(maxHeight + behindDiagramExtraHeight);
+      }
+    });
+  };
 
-    window.addEventListener("resize", resizeThrottler, false);
+  var setUpResize = function() {
     var resizeTimeout;
-    function resizeThrottler() {
-        if ( !resizeTimeout ) {
-          resizeTimeout = setTimeout(function() {
-            resizeTimeout = null;
-            update_diagrams();
-           }, 66);
-        }
-    }
+    var throttledResize = function() {
+      resizeTimeout = null;
+      updateDiagrams();
+    };
+    $(window).resize(function() {
+      if (!resizeTimeout)
+        resizeTimeout = setTimeout(throttledResize, throttleDelay);
+    });
+  };
 
+  var textResizeAction = function(e) {
+    e.preventDefault();
+
+    var self = $(this);
+    var size = self.data('size');
+
+    applyNewTextSize(size);
+    makeSizeLinkActive(self);
+    updateDiagrams();
+  };
+
+  var goHomeAction = function(e) {
+    e.preventDefault();
+
+    goToHomePage();
+    resetSlider();
+  };
+
+  var choiceAction = function(e) {
+    e.preventDefault();
+
+    var self = $(this);
+    var whichSlider = self.data('which-slider');
+    var whichIndex = self.data('which-index');
+    var whichSlides = self.data('which-slides');
+
+    initSlider(sliders[whichSlider - 1], '.slides' + whichSlides + ' > li', 'slide');
+    goToAdvicePage();
+    updateDiagrams();
+    openSlider(whichSlider, whichIndex);
+  };
+
+  var slideNavAction = function(e) {
+    e.preventDefault();
+
+    var self = $(this);
+    var whichSlider = self.data('which-slider');
+    var whichIndex = self.data('which-index');
+
+    moveSlider(whichSlider, whichIndex);
+    makeSlidePageActive(self);
+  };
+
+  allTextSizeLinks.on('click', textResizeAction);
+  choiceLinks.on('click', choiceAction);
+  homeLink.on('click', goHomeAction);
+  sliderNavLinks.on('click', slideNavAction);
+
+  showChoices();
+  hideSlidersBut(0);
+  initSlider(sliders[0], '.slides > li');
+  setUpResize();
 });
