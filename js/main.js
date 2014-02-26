@@ -1,10 +1,6 @@
 $(document).ready(function() {
   var throttleDelay = 66;
-<<<<<<< HEAD
   var behindDiagramExtraHeight = 40;
-=======
-  var behindDiagramExtraHeight = 60;
->>>>>>> 87eacf20b85d62244b3b57a248559e3645e1a99c
   var delayEachChoiceFor = 400; // ms
   var fadeInChoicesFor = 300; // ms
 
@@ -158,10 +154,6 @@ $(document).ready(function() {
     var whichSlider = self.data('which-slider');
     var whichIndex = self.data('which-index');
     var whichSlides = self.data('which-slides');
-<<<<<<< HEAD
-=======
-
->>>>>>> 87eacf20b85d62244b3b57a248559e3645e1a99c
     initSlider(sliders[whichSlider - 1], '.slides' + whichSlides + ' > li', 'slide');
     goToAdvicePage();
     updateDiagrams();
