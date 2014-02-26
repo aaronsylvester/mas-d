@@ -3177,11 +3177,13 @@ textarea {
          url('https://www.moneyadviceservice.org.uk/assets/museo_slab_500-webfont.ttf')  format('truetype'), /* Safari, Android, iOS */
          url('https://www.moneyadviceservice.org.uk/assets/museo_slab_500-webfont.svg#svgFontName') format('svg'); /* Legacy iOS */
     }
+
 a:hover, a:active, a:focus { outline: 0 !important; }
 
 body {
     background: #fff;
 }
+
 #outer {
     background: #fff;
     max-width: 600px;
@@ -3262,12 +3264,17 @@ header nav a.nav_page_2.nav_active { background-position: 0 -67px; }
 }
 
 .funfact p {
-    padding: 5px 0;
+    padding: 10px 0 0;
+    margin-left: 80px;
 }
 
 .this_is_page_1 .funfact { background: #e3f1db; }
 .this_is_page_2 .funfact { background: #f5e4ef; }
 .this_is_page_3 .funfact { background: #e8f3f7; }
+
+.this_is_page_1 .funfact p { padding: 20px 0 0 ;}
+.this_is_page_2 .funfact p { padding: 20px 0 0 ;}
+.this_is_page_3 .funfact p { padding: 13px 0 0 ;}
 
 .flexslider .slides .funfact img {
     width: auto;
@@ -3275,9 +3282,9 @@ header nav a.nav_page_2.nav_active { background-position: 0 -67px; }
     margin: 5%;
 }
 
-.this_is_page_1 .funfact img { margin: 3% 5% !important; }
-.this_is_page_2 .funfact img { margin: 3% 5% !important; }
-.this_is_page_3 .funfact img { margin: 3% 5% !important; }
+.this_is_page_1 .funfact img { margin: 3% 2.5% 3% 5% !important; }
+.this_is_page_2 .funfact img { margin: 3% 2.5% 3% 5% !important; }
+.this_is_page_3 .funfact img { margin: 3% 2.5% 3% 5% !important; }
 
 .this_is_page_0 .funfact span { text-transform: uppercase; color: #000; font-weight: bold; }
 .this_is_page_1 .funfact span { text-transform: uppercase; color: #31642b; font-weight: bold; }
@@ -3441,10 +3448,10 @@ ul.box_list li span { position: relative; left: -5px; }
     float: left;
     width: 63px;
     height: 63px;
-    margin: 15px 20px 65px 30px;
+    margin: 15px 20px 25px 30px;
 }
 .box_top {
-    margin: 0 30px;
+    margin: 0 30px 0 113px;
 }
 .box_top h2 {
     line-height: 1;
@@ -3454,7 +3461,6 @@ ul.box_list li span { position: relative; left: -5px; }
 .this_is_page_3 .box_top p span { font-family: 'MuseoSlab500',serif; text-transform: uppercase; color: #1189ac; font-weight: bold; }
 
 p.box_top_newline {
-    background: red;
     clear: both;
 }
 
@@ -3464,19 +3470,22 @@ p.box_top_newline {
     padding-top: 10px;
     text-align: center;
     text-transform: uppercase;
+    color: #666;
+    font-family: 'MuseoSlab500',serif;
+    font-size: 0.9em;
 }
 
 .diagram_middle {
     overflow: hidden;
-    padding: 10px 20px 40px;
+    padding: 10px 20px 20px;
     clear: both;
     position: relative;
-    background: transparent url(../img/diagram_centre_arrow.gif) bottom center no-repeat;
+    background: transparent url(../img/diagram_centre_arrow_top.gif) top center no-repeat;
 }
 .diagram_behind {
-    -webkit-border-radius: 10px;
+/*    -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
-    border-radius: 10px;
+    border-radius: 10px;*/
     border: 1px solid #e5e5e5;
     height: 50px;
     width: 70%;
@@ -3485,6 +3494,7 @@ p.box_top_newline {
     top: 10px;
     left: 0;
     z-index: -1;
+    border-bottom: none;
 }
 .diagram_box_1 {
     float: left;
@@ -3508,11 +3518,11 @@ p.box_top_newline {
     border-radius: 10px;
     background: #f2f2f2;
     border: 1px solid #e5e5e5;
-    padding: 5px;
+    padding: 8px 12px;
     overflow: hidden;
 }
 .diagram_box h2 {
-    font-size: 0.6em;
+    font-size: 0.5em;
     text-align: center;
     text-transform: uppercase;
     margin: 0;
@@ -3532,6 +3542,7 @@ p.box_top_newline {
 }
 .diagram_box_outer span {
     background: #fff;
+    color: #666;
     font-size: 1em;
     font-weight: bold;
 }
@@ -3550,7 +3561,17 @@ p {
 }
 
 footer {
+
     background: #e6e6e6;
+    background: -moz-linear-gradient(top,  #e6e6e6 0%, #e6e6e6 10%, #ffffff 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e6e6e6), color-stop(10%,#e6e6e6), color-stop(100%,#ffffff));
+    background: -webkit-linear-gradient(top,  #e6e6e6 0%,#e6e6e6 10%,#ffffff 100%);
+    background: -o-linear-gradient(top,  #e6e6e6 0%,#e6e6e6 10%,#ffffff 100%);
+    background: -ms-linear-gradient(top,  #e6e6e6 0%,#e6e6e6 10%,#ffffff 100%);
+    background: linear-gradient(to bottom,  #e6e6e6 0%,#e6e6e6 10%,#ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6e6e6', endColorstr='#ffffff',GradientType=0 );
+
+
     -webkit-border-bottom-right-radius: 20px;
     -webkit-border-bottom-left-radius: 20px;
     -moz-border-radius-bottomright: 20px;
@@ -3578,8 +3599,11 @@ footer .sources_left {
 footer .source_list {
     display: block;
     float: left;
-    margin-left: 80px;
+    margin-left: 52px;
 }
+.text_medium footer .source_list { margin-left: 60px; }
+.text_large footer .source_list { margin-left: 75px; }
+
 footer a.logo {
     display: block;
     position: absolute;
@@ -3684,12 +3708,14 @@ html[xmlns] .slides {display: block;}
     .choice_middle { width: 71%;}
 }
 @media only screen and (max-width : 399px) {
-    .diagram_box  { float: none; width: 100%; min-height: auto; height: auto; margin: 0; }
+    .diagram_box  { float: none; /*width: 100%;*/ min-height: auto; height: auto; margin: 0; }
     .diagram_box_1, .diagram_box_2, .diagram_box_3 { width: 100%; margin: 0; }
     .diagram_behind { display: none; }
     .icon { display: none; }
+    .box_top { margin: 0 20px; }
     .choice_left { width: 20.5%; }
     .choice_middle { width: 66%;}
+    .diagram_middle { background: none; }
 }
 @media only screen and (max-width : 599px) {
     .choice_left { float: left; width: 11.5%; margin: 0 3.5% 0 5%; }
